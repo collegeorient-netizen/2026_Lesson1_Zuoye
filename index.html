@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ДЗ · Урок 1 · Знакомство · 第一課作業</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Rubik:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+
+:root{
+  --ink:#1E2A44;
+  --paper:#F2F5F9;
+  --card:#FFFFFF;
+  --red:#C6382F;
+  --red-dark:#A02B24;
+  --gold:#E8A93B;
+  --blue:#6E8296;
+  --green:#2E8B57;
+  --line:#D5DCE6;
+  --muted:#6B7688;
+  --radius:16px;
+  --shadow:0 2px 10px rgba(30,42,68,.10);
+  font-size:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:'Rubik','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;
+  background:var(--paper);color:var(--ink);
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+}
+.app{width:100%;max-width:560px;padding:14px 14px 40px}
+h1,h2,.disp{font-family:'Russo One','Noto Sans TC',sans-serif;font-weight:400}
+
+/* шрифт со знаком ударения и чжуинь — БЕЗ Russo One (в ней нет диакритики и бопомофо) */
+.tr{font-family:'Rubik','Noto Sans TC','PingFang TC','Microsoft JhengHei','Segoe UI',Arial,sans-serif}
+
+/* ---------- шапка ---------- */
+.top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.top .back{
+  border:none;background:var(--card);border:1px solid var(--line);
+  width:42px;height:42px;border-radius:12px;font-size:20px;color:var(--ink);
+  cursor:pointer;flex:0 0 auto;display:none;
+}
+.top .titlebox{flex:1;min-width:0}
+.top h1{font-size:1.15rem;line-height:1.2}
+.top .sub{font-size:.8rem;color:var(--muted)}
+.stars{font-size:.9rem;color:var(--gold);white-space:nowrap}
+
+/* ---------- домашний экран ---------- */
+.hero{
+  background:#F7EFDE;color:var(--ink);border-radius:20px;padding:20px 18px 22px;
+  margin-bottom:12px;position:relative;overflow:hidden;border:1px solid #EADFC5;
+}
+.hero::after{
+  content:"Я";position:absolute;right:-14px;bottom:-34px;
+  font-family:'Russo One';font-size:130px;color:rgba(198,56,47,.08);
+}
+.hero .zh{font-size:.85rem;color:#9A8B6B;margin-bottom:6px}
+.hero .phrase{font-family:'Russo One';font-size:1.5rem;line-height:1.35}
+.hero .phrase b{color:var(--red);font-weight:400}
+.hero .listen{
+  margin-top:14px;border:none;background:var(--red);color:#fff;
+  font-family:'Rubik';font-weight:700;font-size:.95rem;
+  padding:10px 18px;border-radius:999px;cursor:pointer;
+}
+.hero .listen:active{background:var(--red-dark)}
+
+/* ---------- панель звука ---------- */
+.sound{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:12px 14px;margin-bottom:16px;box-shadow:var(--shadow);font-size:.85rem;
+}
+.sound .hdr{display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-weight:700}
+.sound .hdr .zh{font-weight:400;color:var(--muted);font-size:.78rem}
+.sound .body{display:none;margin-top:12px}
+.sound.open .body{display:block}
+.sound label{display:block;font-size:.75rem;color:var(--muted);margin:0 0 5px}
+.sound select{
+  width:100%;padding:9px 10px;border:1.5px solid var(--line);border-radius:10px;
+  font-family:'Rubik';font-size:.9rem;color:var(--ink);background:#F7F9FC;margin-bottom:12px;
+}
+.speeds{display:flex;gap:6px;margin-bottom:12px}
+.speeds button{
+  flex:1;border:1.5px solid var(--line);background:var(--card);border-radius:10px;
+  padding:9px 4px;font-family:'Rubik';font-size:.85rem;color:var(--ink);cursor:pointer;
+}
+.speeds button.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.warn{
+  background:#FBEAE8;border-left:4px solid var(--red);border-radius:10px;
+  padding:10px 12px;font-size:.8rem;line-height:1.5;margin-top:10px;display:none;
+}
+.warn.show{display:block}
+
+.menu{display:grid;gap:10px}
+.mitem{
+  display:flex;align-items:center;gap:14px;background:var(--card);
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:13px 14px;cursor:pointer;box-shadow:var(--shadow);transition:transform .08s;
+}
+.mitem:active{transform:scale(.98)}
+.mnum{
+  font-family:'Russo One';font-size:1.05rem;color:#fff;background:var(--blue);
+  width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+}
+.mitem:nth-child(odd) .mnum{background:var(--red)}
+.mtext{flex:1;min-width:0}
+.mtext .ru{font-weight:700;font-size:.98rem}
+.mtext .zh{font-size:.8rem;color:var(--muted)}
+.mstar{font-size:.85rem;color:var(--gold);white-space:nowrap}
+
+/* ---------- общие элементы ---------- */
+.screen{display:none}
+.screen.active{display:block;animation:fade .18s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.screen.active{animation:none}}
+.instr{
+  background:#E9EEF7;border-left:4px solid var(--blue);border-radius:10px;
+  padding:10px 12px;font-size:.85rem;margin-bottom:14px;line-height:1.5;
+}
+.instr .zh{color:#41506B}
+.btn{
+  border:none;border-radius:14px;padding:13px 20px;font-family:'Rubik';
+  font-weight:700;font-size:1rem;cursor:pointer;color:#fff;background:var(--blue);
+}
+.btn:active{filter:brightness(.9)}
+.btn:focus-visible,.opt:focus-visible,.lcard:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.btn.red{background:var(--red)}
+.btn.grey{background:#8B95A8}
+.btn.ghost{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}
+.btn.sm{padding:9px 14px;font-size:.88rem}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.progress{height:8px;background:#DDE3EC;border-radius:99px;overflow:hidden;margin-bottom:16px}
+.progress i{display:block;height:100%;width:0;background:var(--green);transition:width .25s}
+.feedback{min-height:30px;text-align:center;font-weight:700;font-size:1.05rem;margin:12px 0}
+.feedback.ok{color:var(--green)}
+.feedback.no{color:var(--red)}
+.bigplay{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin:6px auto 18px;border:none;background:var(--ink);color:#fff;
+  font-family:'Russo One';font-size:1.1rem;padding:16px 26px;border-radius:18px;
+  cursor:pointer;box-shadow:var(--shadow);
+}
+.bigplay:active{transform:scale(.97)}
+
+/* ---------- азбука ---------- */
+.lgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.lcard{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:12px 6px 10px;text-align:center;cursor:pointer;box-shadow:var(--shadow);transition:transform .08s;
+}
+.lcard:active{transform:scale(.95)}
+.lcard.playing{outline:3px solid var(--gold)}
+.lcard .big{font-family:'Russo One';font-size:2rem;line-height:1.1}
+.lcard .bp{font-size:1.05rem;color:var(--red);font-weight:700;line-height:1.3}
+.lcard .hint{font-size:.7rem;color:var(--muted);margin-top:2px}
+.detail{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px;margin-top:14px;font-size:.9rem;line-height:1.6;display:none;box-shadow:var(--shadow);
+}
+.detail.show{display:block}
+.detail .dl{font-family:'Russo One';font-size:2.4rem;color:var(--red)}
+.detail .bpbig{font-size:1.5rem;color:var(--ink);font-weight:700}
+.detail .word{color:var(--blue);font-weight:700;cursor:pointer;text-decoration:underline dotted}
+
+/* ---------- квизы ---------- */
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.opts.wide{grid-template-columns:1fr}
+.opt{
+  background:var(--card);border:2px solid var(--line);border-radius:var(--radius);
+  font-family:'Russo One';font-size:1.7rem;padding:20px 6px;text-align:center;
+  cursor:pointer;transition:transform .08s;color:var(--ink);
+}
+.opts.wide .opt{font-size:1.25rem;padding:15px 8px}
+.opt:active{transform:scale(.96)}
+.opt.ok{border-color:var(--green);background:#E6F4EC}
+.opt.no{border-color:var(--red);background:#FBEAE8}
+.opt.dim{opacity:.4;pointer-events:none}
+.qprompt{
+  background:#F7EFDE;border:1px solid #EADFC5;border-radius:var(--radius);
+  padding:18px 14px;text-align:center;margin-bottom:14px;
+}
+.qprompt .bpq{font-size:1.75rem;font-weight:700;line-height:1.4;letter-spacing:1px}
+.qprompt .nmq{font-family:'Russo One';font-size:1.8rem;color:var(--red)}
+.qprompt .cap{font-size:.78rem;color:#8A7F68;margin-top:6px}
+
+/* ---------- слоги ---------- */
+.sylgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.syl{
+  background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:12px 4px 10px;text-align:center;cursor:pointer;box-shadow:var(--shadow);
+}
+.syl .s{font-family:'Russo One';font-size:1.35rem;line-height:1.1}
+.syl .b{font-size:.95rem;color:var(--red);font-weight:700}
+.syl .n{font-size:.65rem;color:var(--muted);line-height:1.3;margin-top:2px}
+.syl:active{transform:scale(.95)}
+.syl.playing{outline:3px solid var(--gold)}
+
+/* ---------- сборка ---------- */
+.slotline{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+  min-height:64px;background:#E9EEF7;border-radius:var(--radius);
+  padding:12px;margin-bottom:14px;border:2px dashed #B9C6DC;
+}
+.slot{
+  min-width:44px;height:52px;background:var(--card);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Russo One';font-size:1.4rem;border:1px solid var(--line);padding:0 10px;cursor:pointer;
+}
+.slot.empty{background:transparent;border:1.5px dashed #A8B4C8}
+.bank{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:14px}
+.tile{
+  background:var(--card);border:2px solid var(--line);border-radius:12px;
+  font-family:'Russo One';font-size:1.4rem;padding:12px 16px;cursor:pointer;
+  box-shadow:var(--shadow);transition:transform .08s;
+}
+.tile:active{transform:scale(.93)}
+.tile.used{visibility:hidden}
+.taskword{text-align:center;font-size:.9rem;color:var(--muted);margin-bottom:10px}
+.taskword b{color:var(--ink)}
+
+/* ---------- имя ---------- */
+.namewrap{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px;box-shadow:var(--shadow);margin-bottom:14px}
+.nameinput{
+  width:100%;font-family:'Russo One';font-size:1.5rem;text-align:center;
+  border:2px solid var(--line);border-radius:12px;padding:12px;color:var(--ink);background:#F7F9FC;
+}
+.nameinput:focus{outline:none;border-color:var(--blue)}
+.searchinput{
+  width:100%;font-family:'Rubik';font-size:1rem;
+  border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;color:var(--ink);background:#F7F9FC;
+}
+.searchinput:focus{outline:none;border-color:var(--blue)}
+.suggest{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px}
+.sug{
+  border:1.5px solid var(--line);background:var(--card);border-radius:999px;
+  padding:7px 14px;font-size:.95rem;font-weight:500;cursor:pointer;font-family:'Rubik';
+}
+.sug:active{background:#E9EEF7}
+.kb{margin-top:14px;user-select:none}
+.kbrow{display:flex;gap:4px;justify-content:center;margin-bottom:5px}
+.key{
+  flex:1;max-width:44px;height:44px;border:none;border-radius:8px;background:#E3E9F2;
+  font-family:'Rubik';font-weight:500;font-size:1.02rem;color:var(--ink);cursor:pointer;
+}
+.key:active{background:var(--blue);color:#fff}
+.key.learned{background:#FBEFD8;border:1px solid var(--gold)}
+.key.wide{max-width:74px;font-size:.8rem}
+.dialog{
+  background:#F7EFDE;color:var(--ink);border:1px solid #EADFC5;
+  border-radius:var(--radius);padding:16px;font-size:1.05rem;line-height:2;margin-bottom:14px;
+}
+.dialog .q{color:#8A7F68}
+.dialog .a{color:var(--red);font-family:'Russo One'}
+
+/* ---------- цепочка имени ---------- */
+.chain{display:flex;flex-direction:column;gap:8px}
+.chstep{
+  display:flex;align-items:center;gap:12px;background:var(--card);
+  border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;
+  box-shadow:var(--shadow);cursor:pointer;
+}
+.chstep:active{transform:scale(.98)}
+.chstep .lvl{font-size:.7rem;color:var(--muted);width:92px;flex:0 0 auto;line-height:1.3}
+.chstep .nm{font-family:'Russo One';font-size:1.35rem;flex:1}
+.chstep .nm span{display:block;font-family:'Rubik';font-size:.8rem;color:var(--muted);font-weight:500}
+.chstep .snd{color:var(--blue);font-size:1.1rem}
+.chstep.c2 .nm{color:var(--blue)}
+.chstep.c3 .nm{color:var(--red)}
+.charrow{text-align:center;color:var(--muted);font-size:1rem;line-height:.7}
+.guessnote{font-size:.75rem;color:var(--muted);text-align:center;margin-top:8px}
+
+/* ---------- карточка имени в каталоге ---------- */
+.namecard{padding:12px 8px 10px !important;text-align:center}
+.namecard .nm{font-family:'Russo One';font-size:1.12rem;line-height:1.2}
+.namecard .bp{font-size:.9rem;color:var(--red);font-weight:700;line-height:1.35;margin-top:3px}
+.namecard .dm{font-size:.75rem;color:var(--muted);margin-top:3px}
+.namecard.sel{outline:3px solid var(--gold)}
+.tabrow{display:flex;gap:8px;margin-bottom:12px}
+.tabrow .btn{flex:1;padding:11px 8px;font-size:.92rem}
+.counter{text-align:center;font-size:.75rem;color:var(--muted);margin:10px 0}
+.nmhead{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px;box-shadow:var(--shadow);margin-bottom:12px;
+}
+.nmhead .n1{font-family:'Russo One';font-size:1.6rem;color:var(--red)}
+.nmhead table{width:100%;font-size:.88rem;margin-top:8px;border-collapse:collapse}
+.nmhead td{padding:4px 0;vertical-align:top}
+.nmhead td:first-child{color:var(--muted);width:96px;font-size:.78rem;padding-right:8px}
+.nmhead .bp{font-size:1.1rem;font-weight:700}
+
+/* ---------- результат ---------- */
+.result{text-align:center;background:var(--card);border-radius:20px;padding:28px 18px;box-shadow:var(--shadow)}
+.result .rstars{font-size:2.4rem;letter-spacing:6px;margin:10px 0}
+.result .score{font-family:'Russo One';font-size:2.2rem;color:var(--blue)}
+.result p{color:var(--muted);font-size:.9rem;margin:8px 0 18px}
+@media (max-width:380px){
+  .opt{font-size:1.4rem;padding:16px 4px}
+  .opts.wide .opt{font-size:1.1rem}
+  .key{height:40px;font-size:.95rem}
+  .namecard .nm{font-size:1rem}
+}
+
+
+/* ---------- домашнее задание ---------- */
+.field{margin-bottom:12px}
+.field label{display:block;font-size:.78rem;color:var(--muted);margin-bottom:5px}
+.field input{
+  width:100%;font-family:'Rubik','Noto Sans TC',sans-serif;font-size:1.02rem;
+  border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;color:var(--ink);background:#F7F9FC;
+}
+.field input:focus{outline:none;border-color:var(--blue)}
+.hintline{font-size:.72rem;color:var(--muted);margin-top:4px;line-height:1.4}
+.err{display:none;background:#FBEAE8;border-left:4px solid var(--red);border-radius:10px;
+  padding:9px 11px;font-size:.82rem;line-height:1.45;margin-top:6px}
+.err.show{display:block}
+.secbadge{display:inline-block;background:#DCE4F0;color:#41506B;border-radius:999px;
+  padding:2px 9px;font-size:.72rem;font-weight:700}
+.report{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px;box-shadow:var(--shadow);margin-top:14px;font-size:.88rem}
+.report summary{cursor:pointer;font-weight:700}
+.report table{width:100%;border-collapse:collapse}
+.report td{padding:6px 0;border-bottom:1px solid var(--line)}
+.report td:nth-child(2){text-align:center;color:var(--muted);width:80px}
+.report td:nth-child(3){text-align:right;width:52px}
+.report tr.tot td{border-bottom:none;padding-top:10px;font-size:1rem}
+.report ol{margin:10px 0 0 20px;line-height:1.7}
+.report li.y{color:var(--green)}
+.report li.n{color:var(--red)}
+.sendbox{background:#F7EFDE;border:1px solid #EADFC5;border-radius:var(--radius);
+  padding:14px;margin-top:14px;font-size:.9rem;line-height:1.5;text-align:center}
+.sendbox .zh{color:#8A7F68;font-size:.82rem}
+
+
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="top">
+    <div class="titlebox">
+      <h1>Домашнее задание · Урок 1</h1>
+      <div class="sub" id="topSub">第一課作業：認識新朋友 · 10 заданий · 100 баллов</div>
+    </div>
+    <div class="stars" id="topStars"></div>
+  </div>
+
+  <!-- ================= РЕГИСТРАЦИЯ ================= -->
+  <section class="screen active" id="scr-reg">
+    <div class="hero">
+      <div class="zh">開始前請填寫資料，並確認語音設定。</div>
+      <div class="phrase">— Как тебя зовут?<br>— Меня зовут <b>…</b></div>
+    </div>
+
+    <div class="sound open" id="soundPanel">
+      <div class="hdr" onclick="document.getElementById('soundPanel').classList.toggle('open')">
+        <span>🔈 Настройка звука</span>
+        <span class="zh">語音設定 ▾</span>
+      </div>
+      <div class="body">
+        <label>Русский голос · 俄語發音人</label>
+        <select id="voiceSel" onchange="setVoice(this.value)"></select>
+        <label>Скорость речи · 語速</label>
+        <div class="speeds" id="speeds">
+          <button onclick="setRate(0.75,this)">Медленно<br>慢</button>
+          <button class="on" onclick="setRate(0.9,this)">Обычно<br>正常</button>
+          <button onclick="setRate(1.05,this)">Быстро<br>快</button>
+        </div>
+        <div class="row">
+          <button class="btn ghost sm" onclick="speak('Здравствуйте! Меня зовут Анна.',1)">🔊 Проверить голос · 試聽</button>
+        </div>
+        <div class="warn" id="voiceWarn">
+          На этом устройстве нет русского голоса — задания на слух выполнить не получится.<br>
+          <span class="zh">此裝置沒有安裝俄語語音，聽力題將無法作答。<br>
+          iPhone/iPad：設定 → 輔助使用 → 朗讀內容 → 聲音 → 俄文。<br>
+          Android：設定 → 系統 → 語言與輸入 → 文字轉語音 → 安裝俄文。<br>
+          Windows：設定 → 時間與語言 → 語言 → 新增俄文（含語音）。</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="namewrap">
+      <div class="field">
+        <label>Имя по-китайски · 中文姓名</label>
+        <input id="fZh" autocomplete="off" placeholder="例：陳美玲">
+      </div>
+      <div class="field">
+        <label>Русское имя · 俄文名字</label>
+        <input id="fRu" list="ruNames" autocomplete="off" placeholder="напр. Екатерина">
+        <datalist id="ruNames"></datalist>
+        <div class="hintline">Можно выбрать из списка или написать своё. <span class="zh">可從清單選，也可自己填。</span></div>
+      </div>
+      <div class="field">
+        <label>Студенческий номер · 學號</label>
+        <input id="fId" autocomplete="off" placeholder="例：11245678">
+      </div>
+      <div class="field">
+        <label>Твой e-mail · 你的電子郵件</label>
+        <input id="fMail" type="email" inputmode="email" autocomplete="email" placeholder="you@cycu.edu.tw">
+        <div class="hintline">Результат придёт тебе и преподавателю. <span class="zh">成績會寄給你和老師各一份。</span></div>
+      </div>
+      <div class="err" id="regErr"></div>
+    </div>
+
+    <div class="instr">10 коротких заданий, каждое по 10 баллов — всего 100. Слушать можно сколько угодно раз, но ответ засчитывается один.
+      <span class="zh">共 10 題，每題 10 分，滿分 100。錄音可以重複聽，但每題只能作答一次。</span></div>
+
+    <div class="row">
+      <button class="btn red" onclick="startHW()">Начать · 開始作答</button>
+    </div>
+  </section>
+
+  <!-- ================= ЗАДАНИЯ ================= -->
+  <section class="screen" id="scr-task">
+    <div class="progress"><i id="pbar"></i></div>
+    <div class="instr" id="tinstr"></div>
+    <div id="tpromptBox"></div>
+    <button class="bigplay" id="tplay" onclick="playTask()">🔊 Слушать · 再聽一次</button>
+
+    <div class="opts" id="topts"></div>
+
+    <div id="buildBox" style="display:none">
+      <div class="taskword" id="btask"></div>
+      <div class="slotline" id="bslots"></div>
+      <div class="bank" id="bbank"></div>
+      <div class="row">
+        <button class="btn ghost" onclick="resetBuild()">↺ Заново · 重來</button>
+        <button class="btn" id="bcheck" onclick="checkBuild()">Ответить · 送出</button>
+      </div>
+    </div>
+
+    <div class="feedback" id="tfb"></div>
+  </section>
+
+  <!-- ================= ИТОГ ================= -->
+  <section class="screen" id="scr-done">
+    <div class="result">
+      <h2 id="dtitle">Готово!</h2>
+      <div class="score" id="dscore"></div>
+      <p id="dmsg"></p>
+    </div>
+
+    <div class="report" id="dbreak"></div>
+
+    <div class="sendbox" id="sendbox">
+      <div id="sendStatus">Отправляю результат… · 正在寄出成績…</div>
+      <div class="row" id="sendBtns" style="margin-top:12px;display:none">
+        <button class="btn sm" onclick="sendResults()">↻ Отправить ещё раз · 重新寄出</button>
+        <button class="btn ghost sm" onclick="copyReport()">📋 Скопировать · 複製成績</button>
+        <a class="btn ghost sm" id="mailtoLink" href="#" style="text-decoration:none;display:inline-block">✉ Отправить письмом · 用郵件寄</a>
+      </div>
+    </div>
+
+    <details class="report" style="margin-top:14px">
+      <summary>Разбор ответов · 作答明細</summary>
+      <div id="dlist"></div>
+    </details>
+  </section>
+
+</div>
+
+<script>
+/* Знак ударения U+0301 остаётся ТОЛЬКО для показа на экране.
+   В синтезатор он не попадает никогда: браузерные голоса не понимают
+   комбинирующую диакритику и рвут слово на две части —
+   «ка́к» → «ка» + «к»(= название буквы «ка») = «кака»,
+   «зову́т» → «зову» + «т»(= «тэ»), «А́нна» → «а» + «нна».
+   plain() снимает ударение перед озвучкой, сравнением и Russo One. */
+const plain = s => (s||'').replace(/\u0301/g,'');
+
+/* ---------- буквы ---------- */
+const LETTERS = [
+ {L:'А', ipa:'[а]', bp:'ㄚ',    zh:'像 ㄚ',                en:'like “a” in “father”',             vi:'như “a” trong “ba”',                 ex:'КАк',   exs:'ка́к',    note:'Открытый звук, как ㄚ. Всегда чётко: <b>А</b>нна.'},
+ {L:'Б', ipa:'[б]', bp:'ㄅ(濁)', zh:'ㄅ 但要出聲 (有聲)',     en:'like “b” in “book” (voiced!)',     vi:'như “b” trong “bà”',                 ex:'теБЯ',  exs:'тебя́',   note:'Звонкий! Не ㄆ и даже не ㄅ: связки дрожат — <b>б</b>а-<b>б</b>а.'},
+ {L:'В', ipa:'[в]', bp:'ㄨ/ㄈ(濁)', zh:'英文 v：上齒咬下唇',   en:'like “v” in “very”',               vi:'như “v” trong “và”',                 ex:'зоВУт', exs:'зову́т',  note:'Верхние зубы + нижняя губа, как англ. <b>v</b>ery. Не ㄨ!'},
+ {L:'Е', ipa:'[йэ]',bp:'ㄧㄝ',   zh:'像 ㄧㄝ',              en:'like “ye” in “yes”',               vi:'như “yê” trong “yêu”',               ex:'мЕня',  exs:'меня́',   note:'Два звука: й+э. <b>Е</b>ва = ㄧㄝ-ва.'},
+ {L:'З', ipa:'[з]', bp:'ㄗ(濁)', zh:'ㄗ 但要出聲 (蜜蜂聲 z-z-z)',en:'like “z” in “zoo”',             vi:'như “d” giọng Bắc (“dạ”)',           ex:'Зовут', exs:'зову́т',  note:'Как жужжание пчелы: з-з-з. В китайском такого звука нет!'},
+ {L:'К', ipa:'[к]', bp:'ㄍ',    zh:'像 ㄍ (不送氣!)',       en:'like “k”, but NO puff of air',     vi:'như “c” trong “cá” (không bật hơi)', ex:'Как',   exs:'ка́к',    note:'Без придыхания! Ближе к ㄍ, чем к ㄎ.'},
+ {L:'М', ipa:'[м]', bp:'ㄇ',    zh:'像 ㄇ',                en:'like “m” in “mom”',                vi:'như “m” trong “mẹ”',                 ex:'Меня',  exs:'меня́',   note:'Губы сомкнуты: м-м-м. <b>М</b>ама.'},
+ {L:'Н', ipa:'[н]', bp:'ㄋ',    zh:'像 ㄋ / 尾音 -n',       en:'like “n” in “no”',                 vi:'như “n” trong “nam”',                ex:'меНЯ',  exs:'меня́',   note:'Кончик языка у зубов. В конце слова тоже: Анто́<b>н</b>.'},
+ {L:'О', ipa:'[о]', bp:'ㄛ',    zh:'像 ㄛ (圓唇)',          en:'like “o” in “more” (round lips!)', vi:'như “ô” trong “cô”',                 ex:'АнтОн', exs:'Антон',  note:'Губы круглые! Чёткое <b>о</b> только под ударением: Ант<b>о</b>́н. Без ударения о звучит как а: з<b>о</b>ву́т = [завут].'},
+ {L:'Т', ipa:'[т]', bp:'ㄉ',    zh:'像 ㄉ (不送氣!)',       en:'like “t”, but NO puff of air',     vi:'như “t” trong “tôi” (không bật hơi)',ex:'Тебя',  exs:'тебя́',   note:'Без придыхания! Ближе к ㄉ, чем к ㄊ.'},
+ {L:'У', ipa:'[у]', bp:'ㄨ',    zh:'像 ㄨ',                en:'like “oo” in “moon”',              vi:'như “u” trong “thu”',                ex:'зовУт', exs:'зову́т',  note:'Губы трубочкой, как ㄨ: <b>у</b>-<b>у</b>-<b>у</b>.'},
+ {L:'Я', ipa:'[йа]',bp:'ㄧㄚ',   zh:'像 ㄧㄚ',              en:'like “ya” in “yard”',              vi:'như “ia” đọc nhanh',                 ex:'тебЯ',  exs:'тебя́',   note:'Два звука: й+а. <b>Я</b>на = ㄧㄚ-на. Я = 我!'}
+];
+
+/* ---------- слоги: письменная форма, форма для синтезатора, чжуинь ---------- */
+/* tts — форма, которую получает синтезатор. Ударение не ставим (см. plain).
+   «во» — это предлог, и голос редуцирует его до [ва]; удвоенная согласная
+   выводит строку из словаря, и G2P читает её как ударный слог [во].
+   Если на каком-то устройстве это зазвучит иначе — правьте поле tts. */
+const SYLLABLES = [
+ {s:'ка', tts:'ка', bp:'ㄍㄚ',       n:'不送氣'},
+ {s:'та', tts:'та', bp:'ㄉㄚ',       n:'不送氣'},
+ {s:'ба', tts:'ба', bp:'ㄅㄚ',       n:'有聲'},
+ {s:'на', tts:'на', bp:'ㄋㄚ',       n:''},
+ {s:'зо', tts:'зо', bp:'ㄗㄛ',       n:'z 有聲'},
+ {s:'во', tts:'вво',bp:'(v)ㄛ',      n:'上齒咬下唇'},
+ {s:'ву', tts:'ву', bp:'(v)ㄨ',      n:'上齒咬下唇'},
+ {s:'ут', tts:'ут', bp:'ㄨ + t',     n:'尾音 t 不加母音'},
+ {s:'те', tts:'те', bp:'ㄉㄧㄝ',      n:'軟音'},
+ {s:'ме', tts:'ме', bp:'ㄇㄧㄝ',      n:'軟音'},
+ {s:'бя', tts:'бя', bp:'ㄅㄧㄚ',      n:'軟音·有聲'},
+ {s:'ня', tts:'ня', bp:'ㄋㄧㄚ',      n:'軟音'}
+];
+
+const SYL_QUIZ = [
+ {a:'бя', d:['ба','вя','мя']},
+ {a:'ня', d:['на','мя','не']},
+ {a:'те', d:['та','де','не']},
+ {a:'зо', d:['со','во','за']},
+ {a:'ву', d:['бу','во','у']},
+ {a:'ме', d:['мя','не','ма']},
+ {a:'ка', d:['га','та','кя']},
+ {a:'ут', d:['ту','от','у']}
+];
+const SYL_TTS = {};
+SYLLABLES.forEach(o=>SYL_TTS[o.s]=o.tts);
+function sylTTS(s){ return SYL_TTS[s] || s; }
+
+const WORDS = [
+ {w:'КАК',   tts:'ка́к',   zh:'怎麼/如何'},
+ {w:'ТЕБЯ',  tts:'тебя́',  zh:'你(賓格)'},
+ {w:'ЗОВУТ', tts:'зову́т', zh:'叫(他們叫)'},
+ {w:'МЕНЯ',  tts:'меня́',  zh:'我(賓格)'}
+];
+
+const PHRASES = [
+ {parts:['Как','тебя','зовут','?'], say:'Как тебя́ зову́т?', zh:'你叫什麼名字？'},
+ {parts:['Меня','зовут','Анна','.'], say:'Меня́ зову́т А́нна.', zh:'我叫安娜。'}
+];
+
+/* ============================================================
+   КАТАЛОГ ИМЁН · 35 женских + 30 мужских
+   full/dim/aff — со знаком ударения (для синтезатора и для чтения)
+   lat — научная латиница, py — пиньинь, bp — чжуинь фухао
+   ============================================================ */
+const NAME_DB = [
+ /* ---------- женские ---------- */
+ {g:'f', full:'А́нна',        dim:'А́ня',     aff:['А́нечка','Аню́та'],        lat:'Ánna',        py:'Ānnà',          bp:'ㄢ ㄋㄚˋ'},
+ {g:'f', full:'Али́на',       dim:'А́ля',     aff:['Али́ночка','Али́нка'],     lat:'Alína',       py:'Ālìnà',         bp:'ㄚ ㄌㄧˋ ㄋㄚˋ'},
+ {g:'f', full:'А́лла',        dim:'А́лла',    aff:['А́ллочка','Алу́ся'],       lat:'Álla',        py:'Ālā',           bp:'ㄚ ㄌㄚ'},
+ {g:'f', full:'Алекса́ндра',  dim:'Са́ша',    aff:['Са́шенька','Шу́ра'],       lat:'Aleksándra',  py:'Ālìshāndélà',   bp:'ㄚ ㄌㄧˋ ㄕㄢ ㄉㄜˊ ㄌㄚˋ'},
+ {g:'f', full:'Анастаси́я',   dim:'На́стя',   aff:['Насте́нька','Настю́ша'],   lat:'Anastasíya',  py:'Ānàsītǎxīyà',   bp:'ㄢ ㄋㄚˋ ㄙ ㄊㄚˇ ㄒㄧ ㄧㄚˋ'},
+ {g:'f', full:'Вале́рия',     dim:'Ле́ра',    aff:['Ле́рочка','Ва́лечка'],     lat:'Valériya',    py:'Wǎlìlìyà',      bp:'ㄨㄚˇ ㄌㄧˋ ㄌㄧˋ ㄧㄚˋ'},
+ {g:'f', full:'Ве́ра',        dim:'Ве́ра',    aff:['Ве́рочка','Веру́ся'],      lat:'Véra',        py:'Wēilā',         bp:'ㄨㄟ ㄌㄚ'},
+ {g:'f', full:'Викто́рия',    dim:'Ви́ка',    aff:['Ви́кочка','Вику́ся'],      lat:'Viktóriya',   py:'Wéikèduōlìyà',  bp:'ㄨㄟˊ ㄎㄜˋ ㄉㄨㄛ ㄌㄧˋ ㄧㄚˋ'},
+ {g:'f', full:'Да́рья',       dim:'Да́ша',    aff:['Да́шенька','Дашу́ля'],     lat:'Dárya',       py:'Dálìyà',        bp:'ㄉㄚˊ ㄌㄧˋ ㄧㄚˋ'},
+ {g:'f', full:'Диа́на',       dim:'Ди́я',     aff:['Диа́ночка','Диа́нка'],     lat:'Diána',       py:"Dī'ànnà",       bp:'ㄉㄧ ㄢˋ ㄋㄚˋ'},
+ {g:'f', full:'Екатери́на',   dim:'Ка́тя',    aff:['Ка́тенька','Катю́ша'],     lat:'Yekaterína',  py:'Yékātélínà',    bp:'ㄧㄝˊ ㄎㄚ ㄊㄜˊ ㄌㄧˊ ㄋㄚˋ'},
+ {g:'f', full:'Еле́на',       dim:'Ле́на',    aff:['Ле́ночка','Алёнушка'],    lat:'Yeléna',      py:'Yélìnnà',       bp:'ㄧㄝˊ ㄌㄧˋ ㄋㄚˋ'},
+ {g:'f', full:'Зо́я',         dim:'Зо́я',     aff:['Зо́енька','Зо́ечка'],      lat:'Zóya',        py:'Zuǒyà',         bp:'ㄗㄨㄛˇ ㄧㄚˋ'},
+ {g:'f', full:'Ири́на',       dim:'И́ра',     aff:['И́рочка','Ири́шка'],       lat:'Irína',       py:'Yīlìnà',        bp:'ㄧ ㄌㄧˋ ㄋㄚˋ'},
+ {g:'f', full:'Ки́ра',        dim:'Ки́ра',    aff:['Ки́рочка','Киру́ша'],      lat:'Kíra',        py:'Jīlā',          bp:'ㄐㄧ ㄌㄚ'},
+ {g:'f', full:'Кла́вдия',     dim:'Кла́ва',   aff:['Кла́вочка','Клавдю́ша'],   lat:'Klávdiya',    py:'Kèlāfūdìyà',    bp:'ㄎㄜˇ ㄌㄚ ㄈㄨ ㄉㄧˋ ㄧㄚˋ'},
+ {g:'f', full:'Кристи́на',    dim:'Кри́сти',  aff:['Кристи́ночка','Ти́на'],    lat:'Kristína',    py:'Kèlǐsītīnà',    bp:'ㄎㄜˇ ㄌㄧˇ ㄙ ㄊㄧ ㄋㄚˊ'},
+ {g:'f', full:'Ксе́ния',      dim:'Ксю́ша',   aff:['Ксю́шенька','Ксю́шечка'],  lat:'Kséniya',     py:'Kèxièníyà',     bp:'ㄎㄜˋ ㄒㄧㄝˋ ㄋㄧˊ ㄧㄚˋ'},
+ {g:'f', full:'Лари́са',      dim:'Ла́ра',    aff:['Ла́рочка','Лари́ска'],     lat:'Lárisa',      py:'Lālìsā',        bp:'ㄌㄚ ㄌㄧˋ ㄙㄚ'},
+ {g:'f', full:'Ли́лия',       dim:'Ли́ля',    aff:['Ли́лечка','Лилю́ша'],      lat:'Líliya',      py:'Lìlìyà',        bp:'ㄌㄧˋ ㄌㄧˋ ㄧㄚˋ'},
+ {g:'f', full:'Любо́вь',      dim:'Лю́ба',    aff:['Лю́бочка','Люба́ша'],      lat:'Lyubóv',      py:'Liǔbófú',       bp:'ㄌㄧㄡˇ ㄅㄛˊ ㄈㄨˊ'},
+ {g:'f', full:'Ма́йя',        dim:'Ма́йя',    aff:['Ма́ечка','Ма́йечка'],      lat:'Máya',        py:'Mǎyà',          bp:'ㄇㄚˇ ㄧㄚˋ'},
+ {g:'f', full:'Мари́я',       dim:'Ма́ша',    aff:['Ма́шенька','Мару́ся'],     lat:'Maríya',      py:'Mǎlìyà',        bp:'ㄇㄚˇ ㄌㄧˋ ㄧㄚˋ'},
+ {g:'f', full:'Ми́ла',        dim:'Ми́ла',    aff:['Ми́лочка','Милу́ша'],      lat:'Míla',        py:'Mǐlā',          bp:'ㄇㄧˇ ㄌㄚ'},
+ {g:'f', full:'Наде́жда',     dim:'На́дя',    aff:['На́денька','Надю́ша'],     lat:'Nadézhda',    py:'Nàjiérìdá',     bp:'ㄋㄚˋ ㄐㄧㄝˊ ㄖˋ ㄉㄚˊ'},
+ {g:'f', full:'Ната́лья',     dim:'Ната́ша',  aff:['Ната́шенька','Нату́ся'],   lat:'Natálya',     py:'Nàtǎlìyà',      bp:'ㄋㄚˋ ㄊㄚˇ ㄌㄧˋ ㄧㄚˋ'},
+ {g:'f', full:'Ни́на',        dim:'Ни́на',    aff:['Ни́ночка','Нину́ся'],      lat:'Nína',        py:'Nínà',          bp:'ㄋㄧˊ ㄋㄚˋ'},
+ {g:'f', full:'О́льга',       dim:'О́ля',     aff:['О́ленька','О́лечка'],      lat:'Ólga',        py:"Ào'ěrjiā",      bp:'ㄠˋ ㄦˇ ㄐㄧㄚ'},
+ {g:'f', full:'Поли́на',      dim:'По́ля',    aff:['По́лечка','Полю́шка'],     lat:'Polína',      py:'Bōlínnà',       bp:'ㄅㄛ ㄌㄧㄣˊ ㄋㄚˋ'},
+ {g:'f', full:'Светла́на',    dim:'Све́та',   aff:['Све́точка','Све́тик'],     lat:'Svetlána',    py:'Sīwèitèlánà',   bp:'ㄙ ㄨㄟˋ ㄊㄜˋ ㄌㄢˊ ㄋㄚˋ'},
+ {g:'f', full:'Софи́я',       dim:'Со́ня',    aff:['Со́нечка','Соню́шка'],     lat:'Sofíya',      py:'Suǒfēiyà',      bp:'ㄙㄨㄛˇ ㄈㄟ ㄧㄚˋ'},
+ {g:'f', full:'Тама́ра',      dim:'То́ма',    aff:['То́мочка','Тама́рочка'],   lat:'Tamára',      py:'Tāmǎlā',        bp:'ㄊㄚ ㄇㄚˇ ㄌㄚ'},
+ {g:'f', full:'Татья́на',     dim:'Та́ня',    aff:['Та́нечка','Таню́ша'],      lat:'Tatyána',     py:'Tǎjìyángnà',    bp:'ㄊㄚˇ ㄐㄧˋ ㄧㄤˊ ㄋㄚˋ'},
+ {g:'f', full:'Ю́лия',        dim:'Ю́ля',     aff:['Ю́ленька','Ю́лечка'],      lat:'Yúliya',      py:'Yóulìyà',       bp:'ㄧㄡˊ ㄌㄧˋ ㄧㄚˋ'},
+ {g:'f', full:'Я́на',         dim:'Я́на',     aff:['Я́ночка','Яну́ся'],        lat:'Yána',        py:'Yǎnà',          bp:'ㄧㄢˇ ㄋㄚˋ'},
+
+ /* ---------- мужские ---------- */
+ {g:'m', full:'Алекса́ндр',   dim:'Са́ша',    aff:['Са́шенька','Шу́рик'],      lat:'Aleksándr',   py:'Ālìshāndé',     bp:'ㄚ ㄌㄧˋ ㄕㄢ ㄉㄜˊ'},
+ {g:'m', full:'Алексе́й',     dim:'Лёша',    aff:['Лёшенька','Алёшка'],     lat:'Alekséy',     py:'Ālièkèxiè',     bp:'ㄚ ㄌㄧㄝˋ ㄎㄜˋ ㄒㄧㄝˋ'},
+ {g:'m', full:'Андре́й',      dim:'Андрю́ша', aff:['Андрю́шенька','Андре́йка'],lat:'Andréy',      py:'Āndélǐ',        bp:'ㄢ ㄉㄜˊ ㄌㄧˇ'},
+ {g:'m', full:'Анто́н',       dim:'Анто́ша',  aff:['Анто́шенька','То́ша'],     lat:'Antón',       py:"Āntuō'ēn",      bp:'ㄢ ㄊㄨㄛ ㄣ'},
+ {g:'m', full:'Арту́р',       dim:'А́ртя',    aff:['Арту́рчик','Артю́ша'],     lat:'Artúr',       py:"Ātǔ'ěr",        bp:'ㄚ ㄊㄨˇ ㄦˇ'},
+ {g:'m', full:'Бори́с',       dim:'Бо́ря',    aff:['Бо́ренька','Борю́ша'],     lat:'Borís',       py:'Bōlǐsī',        bp:'ㄅㄛ ㄌㄧˇ ㄙ'},
+ {g:'m', full:'Влади́мир',    dim:'Во́ва',    aff:['Во́вочка','Воло́денька'],  lat:'Vladímir',    py:"Wūlājīmǐ'ěr",   bp:'ㄨ ㄌㄚ ㄐㄧ ㄇㄧˇ ㄦˇ'},
+ {g:'m', full:'Ви́ктор',      dim:'Ви́тя',    aff:['Ви́тенька','Витю́ша'],     lat:'Víktor',      py:'Wéikèduō',      bp:'ㄨㄟˊ ㄎㄜˋ ㄉㄨㄛ'},
+ {g:'m', full:'Глеб',        dim:'Глеб',    aff:['Гле́бушка','Гле́бчик'],    lat:'Gleb',        py:'Gélǐbù',        bp:'ㄍㄜˊ ㄌㄧˇ ㄅㄨˋ'},
+ {g:'m', full:'Дании́л',      dim:'Да́ня',    aff:['Да́нечка','Даню́ша'],      lat:'Daniíl',      py:"Dǎníyī'ěr",     bp:'ㄉㄚˇ ㄋㄧˊ ㄧ ㄦˇ'},
+ {g:'m', full:'Дени́с',       dim:'Де́н',     aff:['Дени́ска','Де́нечка'],     lat:'Denís',       py:'Dénísī',        bp:'ㄉㄜˊ ㄋㄧˊ ㄙ'},
+ {g:'m', full:'Дми́трий',     dim:'Ди́ма',    aff:['Ди́мочка','Диму́ля'],      lat:'Dmítriy',     py:'Démǐtèlǐ',      bp:'ㄉㄜˊ ㄇㄧˇ ㄊㄜˋ ㄌㄧˇ'},
+ {g:'m', full:'Евге́ний',     dim:'Же́ня',    aff:['Же́нечка','Женёк'],       lat:'Yevgéniy',    py:'Yèfūgēnní',     bp:'ㄧㄝˋ ㄈㄨ ㄍㄣ ㄋㄧˊ'},
+ {g:'m', full:'Ива́н',        dim:'Ва́ня',    aff:['Ва́нечка','Ваню́ша'],      lat:'Iván',        py:'Yīwàn',         bp:'ㄧ ㄨㄢˋ'},
+ {g:'m', full:'И́горь',       dim:'Игорёк',  aff:['Игорю́ша','Го́ша'],        lat:'Ígor',        py:"Yīgē'ěr",       bp:'ㄧ ㄍㄜ ㄦˇ'},
+ {g:'m', full:'Илья́',        dim:'Илю́ша',   aff:['Илю́шенька','Илю́шка'],    lat:'Ilyá',        py:'Yīlǐyà',        bp:'ㄧ ㄌㄧˇ ㄧㄚˋ'},
+ {g:'m', full:'Константи́н',  dim:'Ко́стя',   aff:['Ко́стенька','Ко́стик'],    lat:'Konstantín',  py:'Kāngsītǎndīng', bp:'ㄎㄤ ㄙ ㄊㄢˇ ㄉㄧㄥ'},
+ {g:'m', full:'Леони́д',      dim:'Лёня',    aff:['Лёнечка','Лёнька'],      lat:'Leoníd',      py:"Liè'ōngnídé",   bp:'ㄌㄧㄝˋ ㄡ ㄋㄧˊ ㄉㄜˊ'},
+ {g:'m', full:'Макси́м',      dim:'Макс',    aff:['Макси́мка','Максю́ша'],    lat:'Maksím',      py:'Mǎkèxīmǔ',      bp:'ㄇㄚ ㄎㄜˋ ㄒㄧ ㄇㄨˋ'},
+ {g:'m', full:'Михаи́л',      dim:'Ми́ша',    aff:['Ми́шенька','Мишу́тка'],    lat:'Mikhaíl',     py:"Mǐhāyī'ěr",     bp:'ㄇㄧˇ ㄏㄚ ㄧ ㄦˇ'},
+ {g:'m', full:'Ники́та',      dim:'Ники́тка', aff:['Никиту́ша','Ни́ка'],       lat:'Nikíta',      py:'Níjītǎ',        bp:'ㄋㄧˊ ㄐㄧ ㄊㄚˇ'},
+ {g:'m', full:'Никола́й',     dim:'Ко́ля',    aff:['Ко́ленька','Колю́ня'],     lat:'Nikoláy',     py:'Nígǔlāi',       bp:'ㄋㄧˊ ㄍㄨˇ ㄌㄞ'},
+ {g:'m', full:'Оле́г',        dim:'Оле́жка',  aff:['Оле́жек','Оле́женька'],    lat:'Olég',        py:'Àolièkè',       bp:'ㄠˋ ㄌㄧㄝˋ ㄍㄜˊ'},
+ {g:'m', full:'Па́вел',       dim:'Па́ша',    aff:['Па́шенька','Па́влик'],     lat:'Pável',       py:"Pāwéi'ěr",      bp:'ㄆㄚ ㄨㄟˊ ㄦˇ'},
+ {g:'m', full:'Пётр',        dim:'Пе́тя',    aff:['Пе́тенька','Петру́ша'],    lat:'Pyotr',       py:'Bǐdé',          bp:'ㄅㄧˇ ㄉㄜˊ'},
+ {g:'m', full:'Рома́н',       dim:'Ро́ма',    aff:['Ро́мочка','Ро́мчик'],      lat:'Román',       py:'Luómàn',        bp:'ㄌㄨㄛˊ ㄇㄢˋ'},
+ {g:'m', full:'Серге́й',      dim:'Серёжа',  aff:['Серёженька','Сергу́ня'],  lat:'Sergéy',      py:"Xiè'ěrgài",     bp:'ㄒㄧㄝˋ ㄦˇ ㄍㄞˋ'},
+ {g:'m', full:'Степа́н',      dim:'Стёпа',   aff:['Стёпочка','Стёпушка'],   lat:'Stepán',      py:'Sījiépān',      bp:'ㄙ ㄐㄧㄝˊ ㄆㄢ'},
+ {g:'m', full:'Тиму́р',       dim:'Ти́ма',    aff:['Ти́мочка','Тимо́ша'],      lat:'Timúr',       py:"Tímù'ěr",       bp:'ㄊㄧˊ ㄇㄨˇ ㄦˇ'},
+ {g:'m', full:'Ю́рий',        dim:'Ю́ра',     aff:['Ю́рочка','Ю́рик'],        lat:'Yúriy',       py:'Yóulǐ',         bp:'ㄧㄡˊ ㄌㄧˇ'}
+];
+
+/* поиск цепочки по любой форме имени (без учёта ударения) */
+function findChain(name){
+  const n = plain(name).trim().toLowerCase().replace(/ё/g,'е');
+  if(!n) return null;
+  const eq = x => plain(x).toLowerCase().replace(/ё/g,'е')===n;
+  return NAME_DB.find(o => eq(o.full) || eq(o.dim) || o.aff.some(eq)) || null;
+}
+/* эвристика для имён вне каталога (в т.ч. придуманных) */
+function guessChain(name){
+  const n = name.trim();
+  if(!n) return null;
+  const last = plain(n).slice(-1).toLowerCase();
+  const stem = n.slice(0,-1);
+  if(last==='я') return {full:n, dim:n, aff:[stem+'ечка', stem+'юша'], guess:true};
+  if(last==='а') return {full:n, dim:n, aff:[stem+'очка', stem+'уся'], guess:true};
+  return {full:n, dim:n, aff:[n+'чик', n+'ушка'], guess:true};
+}
+
+
+/* ============================================================
+   ОЗВУЧКА
+   Принципы: (1) никакого замедления ниже ~0.75 — именно оно даёт
+   «мультяшный» тянущийся звук; (2) в синтезатор уходит только чистый
+   текст без диакритики (mkUtt вызывает plain); (3) реплики ставятся
+   в очередь через onend, а не через setTimeout наугад.
+   ============================================================ */
+let voices=[], ruVoices=[], curVoice=null, rateMul=0.9, speakToken=0;
+
+function refreshVoices(){
+  voices = (window.speechSynthesis ? speechSynthesis.getVoices() : []) || [];
+  ruVoices = voices.filter(v => (v.lang||'').toLowerCase().replace('_','-').startsWith('ru'));
+  if(!curVoice || ruVoices.indexOf(curVoice)<0) curVoice = bestVoice();
+  renderVoiceUI();
+}
+function bestVoice(){
+  if(!ruVoices.length) return null;
+  const pref = ['Milena','Katya','Yuri','Google русский','Microsoft Svetlana','Microsoft Irina','Microsoft Dmitry','Pavel','Russian'];
+  for(const p of pref){
+    const v = ruVoices.find(v => (v.name||'').toLowerCase().includes(p.toLowerCase()));
+    if(v) return v;
+  }
+  return ruVoices.find(v=>v.localService) || ruVoices[0];
+}
+function renderVoiceUI(){
+  const sel = document.getElementById('voiceSel');
+  const warn = document.getElementById('voiceWarn');
+  if(!sel) return;
+  sel.innerHTML='';
+  if(!ruVoices.length){
+    sel.innerHTML='<option>Русский голос не найден · 找不到俄語語音</option>';
+    warn.classList.add('show');
+    document.getElementById('soundPanel').classList.add('open');
+    return;
+  }
+  warn.classList.remove('show');
+  ruVoices.forEach((v,i)=>{
+    const o=document.createElement('option');
+    o.value=i; o.textContent=v.name+(v.localService?'':' (онлайн)');
+    if(v===curVoice) o.selected=true;
+    sel.appendChild(o);
+  });
+}
+function setVoice(i){ curVoice = ruVoices[+i] || null; speak('Меня́ зову́т А́нна.',1); }
+function setRate(r, btn){
+  rateMul = r;
+  document.querySelectorAll('#speeds button').forEach(b=>b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  speak('Как тебя́ зову́т?',1);
+}
+if('speechSynthesis' in window){
+  refreshVoices();
+  speechSynthesis.onvoiceschanged = refreshVoices;
+  setTimeout(refreshVoices, 800);   /* Chrome отдаёт список с задержкой */
+}
+
+function mkUtt(text, rate){
+  /* plain() обязателен: с комбинирующим ударением голос рвёт слово */
+  const u = new SpeechSynthesisUtterance(plain(text));
+  u.lang = 'ru-RU';
+  if(curVoice) u.voice = curVoice;
+  u.rate = Math.max(0.6, Math.min(1.3, (rate||1) * rateMul));
+  u.pitch = 1; u.volume = 1;
+  return u;
+}
+/* одна реплика */
+function speak(text, rate){
+  if(!('speechSynthesis' in window)){ alert('Озвучка не поддерживается · 此瀏覽器不支援語音'); return; }
+  speechSynthesis.cancel();
+  const my = ++speakToken;
+  /* пауза после cancel(): без неё Chrome/Safari глотают начало фразы */
+  setTimeout(()=>{ if(my===speakToken) speechSynthesis.speak(mkUtt(text, rate)); }, 70);
+}
+/* последовательность реплик: следующая стартует по onend, а не по таймеру */
+function speakSeq(items){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const my = ++speakToken;
+  let i = 0;
+  const next = () => {
+    if(my !== speakToken || i >= items.length) return;
+    const it = items[i++];
+    const u = mkUtt(it.t, it.rate);
+    const go = () => setTimeout(next, it.gap===undefined ? 420 : it.gap);
+    u.onend = go; u.onerror = go;
+    speechSynthesis.speak(u);
+  };
+  setTimeout(next, 70);
+}
+
+/* Названия букв. Гласные утроены: одиночный краткий гласный синтезатор
+   глотает и редуцирует («о» → «а»). Утроение даёт долгий чистый звук —
+   в отличие от растягивания через rate=0.55, которое и звучало мультяшно. */
+const LETTER_NAMES = {
+  'А':'ааа','Б':'бэ','В':'вэ','Г':'гэ','Д':'дэ','Е':'еее','Ё':'ёёё','Ж':'жэ','З':'зэ',
+  'И':'иии','Й':'и краткое','К':'ка','Л':'эль','М':'эм','Н':'эн','О':'ооо','П':'пэ',
+  'Р':'эр','С':'эс','Т':'тэ','У':'ууу','Ф':'эф','Х':'ха','Ц':'цэ','Ч':'че','Ш':'ша',
+  'Щ':'ща','Ъ':'твёрдый знак','Ы':'ыыы','Ь':'мягкий знак','Э':'эээ','Ю':'ююю','Я':'яяя'
+};
+const VOWELS = new Set(['А','Е','Ё','И','О','У','Ы','Э','Ю','Я']);
+function speakLetter(l){
+  const up = plain(l).toUpperCase();
+  const name = LETTER_NAMES[up] || l.toLowerCase();
+  speak(name, VOWELS.has(up) ? 0.9 : 0.95);
+}
+function speakSyl(s){ speakSeq([{t:sylTTS(s),rate:0.85},{t:sylTTS(s),rate:0.85,gap:0}]); }
+
+
+/* ============================================================
+   НАСТРОЙКА — заполнить один раз перед публикацией
+   ============================================================ */
+const CFG = {
+  publicKey   : 'ВСТАВЬТЕ_PUBLIC_KEY',      /* EmailJS → Account → General → Public Key */
+  serviceId   : 'collegeorient',            /* уже существующий сервис */
+  templateId  : 'ВСТАВЬТЕ_TEMPLATE_ID',     /* шаблон с полем To = {{to_email}} */
+  teacherEmail: 'ВСТАВЬТЕ_ВАШ_EMAIL',       /* копия преподавателю */
+  lesson      : 'Урок 1 · Знакомство',
+  deadline    : ''                          /* напр. '2026-09-30', пусто — без срока */
+};
+
+/* ---------- мелкие утилиты ---------- */
+function shuffle(a){return a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);}
+function sample(a,n){return shuffle(a).slice(0,n);}
+function esc(s){return String(s).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));}
+
+let student = null, tasks = [], ti = 0, answers = [], t0 = 0, sent = false, build = null;
+
+/* ============================================================
+   10 заданий × 10 баллов = 100
+   Курс по выбору: задания намеренно простые — узнавание на слух
+   и сопоставление с чжуинь; минимальные пары (бя/ба) не берём.
+   ============================================================ */
+function buildTasks(){
+  const T = [];
+
+  /* 4 · буква на слух */
+  sample(LETTERS,4).forEach(o=>{
+    const opts = shuffle([o.L, ...sample(LETTERS.filter(x=>x.L!==o.L),3).map(x=>x.L)]);
+    T.push({sec:'Буквы 字母', type:'mc', opts, correct:o.L, item:'буква '+o.L,
+      instr:'Послушай и выбери букву. <span class="zh">聽發音，選出正確的字母。</span>',
+      audio:()=>speakLetter(o.L)});
+  });
+
+  /* 2 · слог на слух (варианты из разных слогов урока, не минимальные пары) */
+  sample(SYLLABLES,2).forEach(o=>{
+    const opts = shuffle([o.s, ...sample(SYLLABLES.filter(x=>x.s!==o.s).map(x=>x.s),3)]);
+    T.push({sec:'Слоги 音節', type:'mc', opts, correct:o.s, item:'слог '+o.s,
+      instr:'Послушай и выбери слог. <span class="zh">聽發音，選出正確的音節。</span>',
+      audio:()=>speakSyl(o.s)});
+  });
+
+  /* 2 · слово на слух */
+  const wAll = WORDS.map(o=>o.w.toLowerCase());
+  sample(WORDS,2).forEach(o=>{
+    const w = o.w.toLowerCase();
+    const opts = shuffle([w, ...sample(wAll.filter(x=>x!==w),3)]);
+    T.push({sec:'Слова 單字', type:'mc', opts, correct:w, item:'слово '+w+' ('+o.zh+')',
+      instr:'Какое это слово? <span class="zh">這是哪個單字？</span>',
+      audio:()=>speak(o.tts,0.95)});
+  });
+
+  /* 1 · имя по чжуинь, без звука */
+  (function(){
+    const o = sample(NAME_DB,1)[0];
+    const pool = NAME_DB.filter(x=>x.g===o.g && x.full!==o.full);
+    const opts = shuffle([plain(o.full), ...sample(pool,3).map(x=>plain(x.full))]);
+    T.push({sec:'Имена 名字', type:'mc', wide:true, opts, correct:plain(o.full),
+      item:'чжуинь '+o.bp+' = '+plain(o.full),
+      prompt:'<div class="bpq tr">'+o.bp+'</div><div class="cap">'+o.py+'</div>',
+      instr:'Какое имя так читается? <span class="zh">這個注音是哪個名字？</span>'});
+  })();
+
+  /* 1 · собери фразу урока */
+  (function(){
+    const p = sample(PHRASES,1)[0];
+    T.push({sec:'Фраза 句子', type:'build', goal:[...p.parts], bank:shuffle([...p.parts]),
+      say:p.say, correct:p.parts.join(' '), item:'фраза «'+p.parts.join(' ')+'»',
+      label:'Собери фразу · 拼出句子: <b>'+p.zh+'</b>',
+      instr:'Послушай и собери фразу по порядку. <span class="zh">聽一聽，依順序點選拼出句子。</span>',
+      audio:()=>speak(p.say,0.95)});
+  })();
+
+  /* буквы и слоги вперёд, сборка фразы в конце */
+  const head = T.filter(t=>t.sec.startsWith('Буквы')||t.sec.startsWith('Слоги'));
+  const tail = T.filter(t=>t.type==='build');
+  const mid  = T.filter(t=>head.indexOf(t)<0 && tail.indexOf(t)<0);
+  return [...shuffle(head), ...shuffle(mid), ...tail];
+}
+
+/* ============================================================
+   регистрация
+   ============================================================ */
+function fillNameList(){
+  const dl = document.getElementById('ruNames');
+  NAME_DB.forEach(o=>{
+    const op = document.createElement('option');
+    op.value = plain(o.full);
+    op.label = o.py;
+    dl.appendChild(op);
+  });
+}
+function startHW(){
+  const v = id => document.getElementById(id).value.trim();
+  const s = {zh:v('fZh'), ru:v('fRu'), sid:v('fId'), mail:v('fMail')};
+  const bad = [];
+  if(!s.zh)  bad.push('中文姓名');
+  if(!s.ru)  bad.push('俄文名字');
+  if(!/^[A-Za-z0-9-]{4,}$/.test(s.sid)) bad.push('學號');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s.mail)) bad.push('e-mail');
+  const err = document.getElementById('regErr');
+  if(bad.length){
+    err.textContent = 'Заполни правильно: ' + bad.join(', ') + ' · 請正確填寫';
+    err.classList.add('show');
+    return;
+  }
+  err.classList.remove('show');
+  student = s;
+  tasks = buildTasks();
+  ti = 0; answers = []; sent = false; t0 = Date.now();
+  show('scr-task');
+  renderTask();
+}
+
+/* ============================================================
+   показ заданий
+   ============================================================ */
+function show(id){
+  if(window.speechSynthesis) speechSynthesis.cancel();
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function renderTask(){
+  const t = tasks[ti];
+  document.getElementById('pbar').style.width = (ti/tasks.length*100)+'%';
+  document.getElementById('tinstr').innerHTML =
+    '<b>'+(ti+1)+' / '+tasks.length+'</b> · <span class="secbadge">'+t.sec+'</span><br>'+t.instr;
+  document.getElementById('tfb').textContent = '';
+  document.getElementById('tpromptBox').innerHTML = t.prompt ? '<div class="qprompt">'+t.prompt+'</div>' : '';
+  document.getElementById('tplay').style.display = t.audio ? 'flex' : 'none';
+
+  const optBox = document.getElementById('topts');
+  const bBox   = document.getElementById('buildBox');
+
+  if(t.type === 'mc'){
+    bBox.style.display = 'none';
+    optBox.style.display = 'grid';
+    optBox.className = 'opts' + (t.wide ? ' wide' : '');
+    optBox.innerHTML = '';
+    t.opts.forEach(o=>{
+      const b = document.createElement('div');
+      b.className = 'opt'; b.textContent = o; b.tabIndex = 0;
+      b.onclick = () => answerMC(b, o, t);
+      optBox.appendChild(b);
+    });
+  }else{
+    optBox.style.display = 'none';
+    optBox.innerHTML = '';
+    bBox.style.display = 'block';
+    document.getElementById('btask').innerHTML = t.label;
+    renderBuild(t);
+  }
+  if(t.audio) setTimeout(()=>t.audio(), 380);
+}
+function playTask(){ const t = tasks[ti]; if(t && t.audio) t.audio(); }
+
+function record(t, given, ok){
+  answers.push({sec:t.sec, item:t.item, given:given, ok:ok});
+  const fb = document.getElementById('tfb');
+  fb.textContent = ok ? 'Правильно! 答對了! 👍' : 'Правильный ответ: ' + t.correct + ' · 正確答案：' + t.correct;
+  fb.className = 'feedback ' + (ok ? 'ok' : 'no');
+  setTimeout(()=>{
+    ti++;
+    if(ti < tasks.length) renderTask(); else finish();
+  }, ok ? 1200 : 2200);
+}
+function answerMC(el, val, t){
+  document.querySelectorAll('#topts .opt').forEach(o=>o.classList.add('dim'));
+  const ok = (val === t.correct);
+  el.classList.remove('dim');
+  el.classList.add(ok ? 'ok' : 'no');
+  if(!ok) document.querySelectorAll('#topts .opt').forEach(o=>{
+    if(o.textContent === t.correct){ o.classList.remove('dim'); o.classList.add('ok'); }
+  });
+  record(t, val, ok);
+}
+
+/* ---------- сборка фразы ---------- */
+function renderBuild(t){
+  build = {t:t, picked:new Array(t.goal.length).fill(null)};
+  document.getElementById('bcheck').disabled = false;
+  const slots = document.getElementById('bslots'); slots.innerHTML = '';
+  t.goal.forEach((_,i)=>{
+    const s = document.createElement('div');
+    s.className = 'slot empty'; s.dataset.i = i;
+    s.onclick = () => unpick(i);
+    slots.appendChild(s);
+  });
+  const bank = document.getElementById('bbank'); bank.innerHTML = '';
+  t.bank.forEach((x,bi)=>{
+    const tl = document.createElement('div');
+    tl.className = 'tile'; tl.textContent = x; tl.dataset.bi = bi;
+    tl.onclick = () => pick(tl, x);
+    bank.appendChild(tl);
+  });
+}
+function pick(tile, x){
+  if(tile.classList.contains('used')) return;
+  const i = build.picked.indexOf(null);
+  if(i < 0) return;
+  build.picked[i] = {x:x, bi:tile.dataset.bi};
+  tile.classList.add('used');
+  const s = document.querySelector('.slot[data-i="'+i+'"]');
+  s.classList.remove('empty'); s.textContent = x;
+}
+function unpick(i){
+  const p = build.picked[i]; if(!p) return;
+  build.picked[i] = null;
+  const s = document.querySelector('.slot[data-i="'+i+'"]');
+  s.classList.add('empty'); s.textContent = '';
+  document.querySelector('.tile[data-bi="'+p.bi+'"]').classList.remove('used');
+}
+function resetBuild(){ renderBuild(build.t); }
+function checkBuild(){
+  const t = build.t;
+  if(build.picked.indexOf(null) >= 0){
+    const fb = document.getElementById('tfb');
+    fb.textContent = 'Заполни все места · 請先把句子拼完整';
+    fb.className = 'feedback no';
+    return;
+  }
+  document.getElementById('bcheck').disabled = true;
+  const got = build.picked.map(p=>p.x).join(' ');
+  record(t, got, got === t.correct);
+}
+
+/* ============================================================
+   итог и отправка
+   ============================================================ */
+const PER = 10;
+function finish(){
+  document.getElementById('pbar').style.width = '100%';
+  const ok = answers.filter(a=>a.ok).length;
+  const score = ok * PER;
+  const mins = Math.round((Date.now() - t0) / 60000);
+
+  document.getElementById('dscore').textContent = score + ' / 100';
+  document.getElementById('dtitle').textContent =
+    score >= 90 ? 'Отлично! 太棒了!' : score >= 70 ? 'Хорошо! 很好!' : score >= 50 ? 'Неплохо · 還可以' : 'Надо повторить · 要再複習';
+  document.getElementById('dmsg').textContent =
+    student.ru + ' · ' + student.zh + ' · ' + student.sid + ' · ' + ok + ' из ' + answers.length + ' · ' + mins + ' мин';
+
+  const secs = {};
+  answers.forEach(a=>{
+    secs[a.sec] = secs[a.sec] || {ok:0, n:0};
+    secs[a.sec].n++; if(a.ok) secs[a.sec].ok++;
+  });
+  let rows = '<table>';
+  Object.keys(secs).forEach(k=>{
+    rows += '<tr><td>'+esc(k)+'</td><td>'+secs[k].ok+' / '+secs[k].n+'</td><td><b>'+(secs[k].ok*PER)+'</b></td></tr>';
+  });
+  rows += '<tr class="tot"><td>Итого · 總分</td><td>'+ok+' / '+answers.length+'</td><td><b>'+score+'</b></td></tr></table>';
+  document.getElementById('dbreak').innerHTML = rows;
+
+  let list = '<ol>';
+  answers.forEach(a=>{
+    list += '<li class="'+(a.ok?'y':'n')+'">'+esc(a.item)+' — ответ: '+esc(a.given)+' '+(a.ok?'✓':'✗')+'</li>';
+  });
+  document.getElementById('dlist').innerHTML = list + '</ol>';
+
+  window.REPORT = reportText(score, ok, mins, secs);
+  document.getElementById('mailtoLink').href =
+    'mailto:' + CFG.teacherEmail + '?subject=' + encodeURIComponent('ДЗ ' + CFG.lesson + ' — ' + student.sid + ' ' + student.zh) +
+    '&body=' + encodeURIComponent(window.REPORT);
+
+  show('scr-done');
+  sendResults();
+}
+function reportText(score, ok, mins, secs){
+  const L = [];
+  L.push(CFG.lesson + ' — домашнее задание');
+  L.push('中文姓名: ' + student.zh);
+  L.push('Русское имя: ' + student.ru);
+  L.push('學號: ' + student.sid);
+  L.push('E-mail: ' + student.mail);
+  L.push('');
+  L.push('БАЛЛ: ' + score + ' / 100   (' + ok + ' из ' + answers.length + ' заданий, ' + mins + ' мин)');
+  L.push('');
+  Object.keys(secs).forEach(k=>L.push('  ' + k + ': ' + secs[k].ok + '/' + secs[k].n + ' = ' + (secs[k].ok*PER)));
+  L.push('');
+  L.push('Ответы:');
+  answers.forEach((a,i)=>L.push('  ' + (i+1) + '. ' + a.item + ' — ' + a.given + ' ' + (a.ok?'OK':'X')));
+  L.push('');
+  L.push('Отправлено: ' + new Date().toLocaleString('ru-RU'));
+  return L.join('\n');
+}
+function baseParams(score, ok, mins, secs){
+  return {
+    lesson: CFG.lesson,
+    name_zh: student.zh,
+    name_ru: student.ru,
+    student_id: student.sid,
+    student_email: student.mail,
+    score: String(score),
+    max_score: '100',
+    correct: ok + ' / ' + answers.length,
+    minutes: String(mins),
+    breakdown: Object.keys(secs).map(k=>k + ': ' + secs[k].ok + '/' + secs[k].n + ' = ' + (secs[k].ok*PER)).join('\n'),
+    details: answers.map((a,i)=>(i+1) + '. ' + a.item + ' — ' + a.given + ' ' + (a.ok?'OK':'X')).join('\n'),
+    sent_at: new Date().toLocaleString('ru-RU'),
+    report: ''
+  };
+}
+function setStatus(html, showBtns){
+  document.getElementById('sendStatus').innerHTML = html;
+  document.getElementById('sendBtns').style.display = showBtns ? 'flex' : 'none';
+}
+function sendResults(){
+  const ok = answers.filter(a=>a.ok).length;
+  const score = ok * PER;
+  const mins = Math.round((Date.now() - t0) / 60000);
+  const secs = {};
+  answers.forEach(a=>{ secs[a.sec] = secs[a.sec] || {ok:0,n:0}; secs[a.sec].n++; if(a.ok) secs[a.sec].ok++; });
+
+  if(!window.emailjs || CFG.publicKey.indexOf('ВСТАВЬТЕ') === 0){
+    setStatus('Автоотправка не настроена. Скопируй результат и пришли преподавателю.<br>' +
+              '<span class="zh">自動寄送尚未設定，請複製成績寄給老師。</span>', true);
+    return;
+  }
+  const p = baseParams(score, ok, mins, secs);
+  p.report = window.REPORT;
+  setStatus('Отправляю результат… · 正在寄出成績…', false);
+
+  emailjs.send(CFG.serviceId, CFG.templateId, Object.assign({}, p, {to_email:student.mail, to_name:student.ru}))
+    .then(()=> emailjs.send(CFG.serviceId, CFG.templateId, Object.assign({}, p, {to_email:CFG.teacherEmail, to_name:'Преподаватель'})))
+    .then(()=>{
+      sent = true;
+      setStatus('✅ Результат отправлен на ' + esc(student.mail) + ' и преподавателю.<br>' +
+                '<span class="zh">成績已寄給你和老師。</span>', true);
+    })
+    .catch(err=>{
+      setStatus('⚠️ Письмо не ушло (' + esc(err && (err.text || err.message) || 'ошибка сети') + ').<br>' +
+                'Скопируй результат и пришли преподавателю сам.<br>' +
+                '<span class="zh">寄送失敗，請複製成績自行寄給老師。</span>', true);
+    });
+}
+function copyReport(){
+  const t = window.REPORT || '';
+  const done = () => setStatus('📋 Скопировано — вставь в письмо преподавателю. · 已複製，請貼到郵件中寄給老師。', true);
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(done, fallback);
+  } else fallback();
+  function fallback(){
+    const ta = document.createElement('textarea');
+    ta.value = t; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); done(); }catch(e){ alert(t); }
+    document.body.removeChild(ta);
+  }
+}
+
+/* предупреждение при попытке уйти с незаконченного задания */
+window.addEventListener('beforeunload', e=>{
+  if(student && !sent){ e.preventDefault(); e.returnValue = ''; }
+});
+
+/* ---------- старт ---------- */
+if(window.emailjs && CFG.publicKey.indexOf('ВСТАВЬТЕ') !== 0){
+  emailjs.init({publicKey: CFG.publicKey});
+}
+fillNameList();
+
+</script>
+</body>
+</html>
