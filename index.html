@@ -395,12 +395,13 @@ h1,h2,.disp{font-family:'Russo One','Noto Sans TC',sans-serif;font-weight:400}
       </div>
       <div class="field">
         <label>Студенческий номер · 學號</label>
-        <input id="fId" autocomplete="off" placeholder="例：11245678">
+        <input id="fId" inputmode="numeric" autocomplete="off" placeholder="例：11557245">
       </div>
       <div class="field">
         <label>Твой e-mail · 你的電子郵件</label>
-        <input id="fMail" type="email" inputmode="email" autocomplete="email" placeholder="you@cycu.edu.tw">
-        <div class="hintline">Результат придёт тебе и преподавателю. <span class="zh">成績會寄給你和老師各一份。</span></div>
+        <input id="fMail" type="email" inputmode="email" autocomplete="email" placeholder="11557245@cycu.org.tw">
+        <div class="hintline">Заполнится само после 學號. Результат придёт тебе и преподавателю.
+          <span class="zh">填好學號後會自動帶入。成績會寄給你和老師各一份。</span></div>
       </div>
       <div class="err" id="regErr"></div>
     </div>
@@ -740,13 +741,20 @@ function speakSyl(s){ speakSeq([{t:sylTTS(s),rate:0.85},{t:sylTTS(s),rate:0.85,g
    НАСТРОЙКА — заполнить один раз перед публикацией
    ============================================================ */
 const CFG = {
-  publicKey   : 'ВСТАВЬТЕ_PUBLIC_KEY',      /* EmailJS → Account → General → Public Key */
-  serviceId   : 'collegeorient',            /* уже существующий сервис */
-  templateId  : 'ВСТАВЬТЕ_TEMPLATE_ID',     /* шаблон с полем To = {{to_email}} */
-  teacherEmail: 'ВСТАВЬТЕ_ВАШ_EMAIL',       /* копия преподавателю */
+
+  /* ↓↓↓ ЗАПОЛНИТЬ ДВЕ СТРОКИ — БОЛЬШЕ В ФАЙЛЕ МЕНЯТЬ НИЧЕГО НЕ НУЖНО ↓↓↓ */
+
+  publicKey   : 'СЮДА_PUBLIC_KEY',     /* EmailJS → Account → General → Public Key  */
+  templateId  : 'СЮДА_TEMPLATE_ID',    /* EmailJS → Email Templates → ваш шаблон    */
+
+  /* ↑↑↑ кавычки не стирать: значение пишется между ними ↑↑↑ */
+
+  serviceId   : 'collegeorient',              /* уже готово */
+  teacherEmail: 'collegeorient@gmail.com',    /* уже готово */
   lesson      : 'Урок 1 · Знакомство',
-  deadline    : ''                          /* напр. '2026-09-30', пусто — без срока */
+  studentMailDomain: 'cycu.org.tw'            /* адрес студента = 學號 + @ + это */
 };
+function cfgReady(){ return !/СЮДА_/.test(CFG.publicKey) && !/СЮДА_/.test(CFG.templateId); }
 
 /* ---------- мелкие утилиты ---------- */
 function shuffle(a){return a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);}
@@ -1052,7 +1060,7 @@ function sendResults(){
   const secs = {};
   answers.forEach(a=>{ secs[a.sec] = secs[a.sec] || {ok:0,n:0}; secs[a.sec].n++; if(a.ok) secs[a.sec].ok++; });
 
-  if(!window.emailjs || CFG.publicKey.indexOf('ВСТАВЬТЕ') === 0){
+  if(!window.emailjs || !cfgReady()){
     setStatus('Автоотправка не настроена. Скопируй результат и пришли преподавателю.<br>' +
               '<span class="zh">自動寄送尚未設定，請複製成績寄給老師。</span>', true);
     return;
@@ -1094,10 +1102,22 @@ window.addEventListener('beforeunload', e=>{
 });
 
 /* ---------- старт ---------- */
-if(window.emailjs && CFG.publicKey.indexOf('ВСТАВЬТЕ') !== 0){
+if(window.emailjs && cfgReady()){
   emailjs.init({publicKey: CFG.publicKey});
 }
 fillNameList();
+
+/* адрес студента = 學號 + @cycu.org.tw; подставляем сами, пока его не правили вручную */
+(function(){
+  const fid = document.getElementById('fId'), fmail = document.getElementById('fMail');
+  let touched = false;
+  fmail.addEventListener('input', ()=>{ touched = true; });
+  fid.addEventListener('input', ()=>{
+    if(touched) return;
+    const v = fid.value.trim();
+    fmail.value = v ? v + '@' + CFG.studentMailDomain : '';
+  });
+})();
 
 </script>
 </body>
